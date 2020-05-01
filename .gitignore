@@ -1,0 +1,8 @@
+.project
+jenkins_home
+__pycache__
+reference.txt
+docker-compose-development.yml
+.pydevproject
+test1.py
+loader_utils-development.py

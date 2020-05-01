@@ -1,0 +1,47 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.38">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.6.0"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.6.0">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
+    <script>pipeline {
+ 
+  agent any
+  stages { 
+    stage(&apos;Bootstrap MSSQL Database&apos;){ 
+        steps {  
+        	 sh &apos;&apos;&apos;
+        	    CONTAINER_NAME=&quot;mssql_database&quot; 
+        	    docker exec mssql_database bash -c &apos;sqlcmd -U sa -P 4HLgdrkntTpg &quot;-Q use master; ALTER DATABASE loaderdb SET  SINGLE_USER WITH ROLLBACK IMMEDIATE; drop database IF EXISTS loaderdb;create database loaderdb&quot;&apos;
+        	    docker exec mssql_database bash -c &apos;sqlcmd -U sa -P 4HLgdrkntTpg &quot;-Q use loaderdb; CREATE TABLE dbo.file1 ( id INTEGER  IDENTITY PRIMARY KEY, name varchar(200))&quot;&apos; 
+        	    docker exec mssql_database bash -c &apos;sqlcmd -U sa -P 4HLgdrkntTpg &quot;-Q use loaderdb; CREATE TABLE dbo.file2 ( id INTEGER  IDENTITY PRIMARY KEY, name varchar(200))&quot;&apos; 
+        	    docker exec mssql_database bash -c &apos;sqlcmd -U sa -P 4HLgdrkntTpg &quot;-Q use loaderdb; CREATE TABLE dbo.sensor_status ( id INTEGER  IDENTITY PRIMARY KEY, name varchar(200), status char(1))&quot;&apos; 
+        	    docker exec mssql_database bash -c &apos;sqlcmd -U sa -P 4HLgdrkntTpg &quot;-Q use loaderdb; BEGIN TRAN; insert into dbo.sensor_status (name, status) values (\\&quot;stat1\\&quot;, \\&quot;N\\&quot;); commit TRAN;&quot;&apos;
+				docker inspect -f &apos;{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}&apos; $CONTAINER_NAME
+			&apos;&apos;&apos;
+        }  
+    } 
+    
+    stage(&apos;Clean Workspace&apos;){ 
+        steps {  
+            cleanWs()
+        } 
+    }     
+    
+  } 
+  
+} </script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

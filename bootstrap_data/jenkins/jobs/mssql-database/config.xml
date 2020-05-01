@@ -1,0 +1,54 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.38">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.6.0"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.6.0">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
+    <script>pipeline {
+ 
+  agent any
+  stages { 
+    stage(&apos;Source MSSQL Database&apos;){ 
+        steps {  
+        	 sh &apos;&apos;&apos;
+        	 	CONTAINER_NAME=&quot;mssql_database&quot;
+				CONTAINER_FOUND=&quot;$(docker ps --all --quiet --filter=name=&quot;$CONTAINER_NAME&quot;)&quot;
+				if [ -n &quot;$CONTAINER_FOUND&quot; ]; then
+  					docker stop $CONTAINER_FOUND &amp;&amp; docker rm $CONTAINER_FOUND
+				fi			
+				docker run --name=mssql_database --network=airflow-mssql-loader -e &apos;ACCEPT_EULA=Y&apos; -e &apos;SA_PASSWORD=4HLgdrkntTpg&apos; -e &apos;MSSQL_PID=Express&apos; -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest-ubuntu 
+			&apos;&apos;&apos;
+			
+            sleep(time:25,unit:&quot;SECONDS&quot;)
+            
+        	 sh &apos;&apos;&apos;  
+        	    CONTAINER_NAME=&quot;mssql_database&quot;
+        	    docker exec $CONTAINER_NAME  bash -c &quot;ln -sfn /opt/mssql-tools/bin/sqlcmd /usr/bin/sqlcmd&quot;
+				docker inspect -f &apos;{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}&apos; $CONTAINER_NAME
+			&apos;&apos;&apos;      
+        }  
+    } 
+    
+    stage(&apos;Clean Workspace&apos;){ 
+        steps {  
+            cleanWs()
+        } 
+    }     
+    
+  } 
+  
+} </script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

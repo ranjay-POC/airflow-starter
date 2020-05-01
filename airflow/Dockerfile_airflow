@@ -1,0 +1,38 @@
+FROM puckel/docker-airflow:1.10.9 
+MAINTAINER Ranjay Kumar <ranjayd@gmail.com>
+user root
+RUN apt-get update -y
+
+RUN pip install pymysql
+RUN pip install sqlalchemy
+RUN pip install pandas
+RUN pip install psutil
+RUN pip install pymssql
+RUN pip install mssql-cli
+
+RUN apt-get update && apt-get install -y gnupg2
+ 
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
+
+#Debian 10
+RUN curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list
+ 
+RUN  apt-get update  -y
+RUN  ACCEPT_EULA=Y apt-get install msodbcsql17  -y
+# optional: for bcp and sqlcmd
+RUN  ACCEPT_EULA=Y apt-get install mssql-tools -y
+RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
+RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+#RUN source ~/.bashrc
+# optional: for unixODBC development headers
+RUN  apt-get install unixodbc-dev  -y
+# optional: kerberos library for debian-slim distributions
+RUN  apt-get install libgssapi-krb5-2  -y
+
+RUN apt-get install vim -y
+
+RUN pip install pyodbc
+
+RUN apt-get install iputils-ping -y
+
+RUN pip install boto3

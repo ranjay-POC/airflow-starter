@@ -1,0 +1,61 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.38">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.6.0"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.6.0">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
+    <script>pipeline { 
+  agent any  
+  
+  environment { 
+      def CONTAINER_NAME=&quot;airflow&quot; 
+  }  
+  
+  stages { 
+    stage(&apos;Clean and Start the Airflow Container&apos;){ 
+        steps { 
+            dir(&apos;/opt/airflow&apos;) {  
+                sh &quot;ls  -latr&quot;  
+                sh &apos;&apos;&apos; 
+                        docker ps -as
+                        CONTAINER_FOUND=&quot;$(docker ps --all --quiet --filter=name=&quot;$CONTAINER_NAME&quot;)&quot;
+				        if [ -n &quot;$CONTAINER_FOUND&quot; ]; then
+  					        docker stop $CONTAINER_FOUND &amp;&amp; docker rm $CONTAINER_FOUND
+				        fi	
+				        
+				        docker-compose -f docker-compose.yml build 
+				        docker-compose -f docker-compose.yml up -d
+				        docker cp /opt/airflow/dags  $CONTAINER_NAME:/usr/local/airflow/dags
+                &apos;&apos;&apos;
+                sleep(time:15,unit:&quot;SECONDS&quot;)
+                
+                sh &apos;&apos;&apos;
+                    docker ps -as
+                &apos;&apos;&apos;
+            } 
+        } 
+    }  
+  }
+  
+  post { 
+        always { 
+            cleanWs()
+        }
+  }  
+  
+  
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

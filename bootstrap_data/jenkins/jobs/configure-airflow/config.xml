@@ -1,0 +1,92 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.38">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>AWS_ACCESS_KEY_ID</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>AWS_SECRET_ACCESS_KEY</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>AWS_REGION_NAME</name>
+          <description></description>
+          <defaultValue>us-east-1</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>AWS_S3_BUCKET</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MSSQL_DRIVER</name>
+          <description></description>
+          <defaultValue>{/opt/microsoft/msodbcsql17/lib64/libmsodbcsql-17.5.so.2.1}</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MSSQL_HOST</name>
+          <description></description>
+          <defaultValue>tcp:mssql_database</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MSSQL_DATABASE</name>
+          <description></description>
+          <defaultValue>loaderdb</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MSSQL_USERNAME</name>
+          <description></description>
+          <defaultValue>sa</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MSSQL_PASSWORD</name>
+          <description></description>
+          <defaultValue>4HLgdrkntTpg</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
+    <script>pipeline { 
+  agent any   
+  
+  stages { 
+    stage(&apos;Build Airflow Configurations file&apos;){ 
+        steps { 
+                dir(&apos;/opt/airflow&apos;) {  
+                    sh &quot;ls  -latr&quot; 
+                    writeFile file: &quot;airflow.env&quot;, text: &quot;&quot;&quot;STACK_NAME=airflow\nAWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}\nAWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}\nAWS_REGION_NAME=${AWS_REGION_NAME}\nAWS_S3_BUCKET=${AWS_S3_BUCKET}\nMSSQL_DRIVER=${MSSQL_DRIVER}\nMSSQL_HOST=${MSSQL_HOST}\nMSSQL_DATABASE=${MSSQL_DATABASE}\nMSSQL_USERNAME=${MSSQL_USERNAME}\nMSSQL_PASSWORD=${MSSQL_PASSWORD}\n&quot;&quot;&quot;
+                    writeFile file: &quot;.env&quot;, text: &quot;&quot;&quot;STACK_NAME=airflow\nENV_FILE=airflow.env\nAWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}\nAWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}\nAWS_REGION_NAME=${AWS_REGION_NAME}\nAWS_S3_BUCKET=${AWS_S3_BUCKET}\nMSSQL_DRIVER=${MSSQL_DRIVER}\nMSSQL_HOST=${MSSQL_HOST}\nMSSQL_DATABASE=${MSSQL_DATABASE}\nMSSQL_USERNAME=${MSSQL_USERNAME}\nMSSQL_PASSWORD=${MSSQL_PASSWORD}\n&quot;&quot;&quot;
+             } 
+        } 
+    }  
+  }
+  
+  post { 
+        always { 
+            cleanWs()
+        }
+  } 
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

@@ -1,0 +1,19 @@
+version: '3.1'
+services:
+  jenkins:
+    container_name: jenkins
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+        - '81:8080'
+    volumes:
+        - ../airflow:/opt/airflow
+        - ./jenkins_home:/var/jenkins_home
+        - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - airflow-mssql-loader          
+          
+networks:
+  airflow-mssql-loader:
+    external: true        
