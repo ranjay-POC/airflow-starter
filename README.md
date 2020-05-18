@@ -52,6 +52,7 @@ cd  airflow-mssql-loader/
 
 
 ``` 
+sudo chmod a+x ./install-dependencies.sh
 sudo ./install-dependencies.sh 
 
 ```
