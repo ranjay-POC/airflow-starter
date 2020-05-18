@@ -21,7 +21,7 @@ sudo systemctl start docker.service
 
 
 docker info
-docker network create airflow-mssql-loader
+docker network create airflow-starter
 cd ./jenkins
 docker-compose down && docker-compose build && docker-compose up -d && sleep 10  &&  docker ps
 docker stop jenkins
