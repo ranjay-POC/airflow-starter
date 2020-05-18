@@ -19,6 +19,13 @@ Docker installed on VM
 
 Please follow the steps below in order to have it up and running on your machine.
 
+* make sue git is installed on your EC2/VM
+
+```
+sudo yum -y install git
+
+```
+
 * Change directory
 
 ```
