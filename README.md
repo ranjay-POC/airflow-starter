@@ -44,8 +44,8 @@ sudo git clone https://github.com/ranjay-POC/airflow-starter.git
 
 
 ``` 
-sudo chmod -R 777 airflow-mssql-loader/
-cd  airflow-mssql-loader/
+sudo chmod -R 777 airflow-starter/
+cd  airflow-starter/
 ```
 
 * run the following script to install dependencies

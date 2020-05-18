@@ -12,7 +12,7 @@ services:
                 max-size: 10m
                 max-file: "3"
         networks:
-          - airflow-mssql-loader                
+          - airflow-starter                
 
     airflow:
       container_name: airflow
@@ -47,8 +47,8 @@ services:
           timeout: 30s
           retries: 3 
       networks:
-        - airflow-mssql-loader          
+        - airflow-starter          
           
 networks:
-  airflow-mssql-loader:
+  airflow-starter:
     external: true

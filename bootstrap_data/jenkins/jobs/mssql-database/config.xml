@@ -25,7 +25,7 @@
 				if [ -n &quot;$CONTAINER_FOUND&quot; ]; then
   					docker stop $CONTAINER_FOUND &amp;&amp; docker rm $CONTAINER_FOUND
 				fi			
-				docker run --name=mssql_database --network=airflow-mssql-loader -e &apos;ACCEPT_EULA=Y&apos; -e &apos;SA_PASSWORD=4HLgdrkntTpg&apos; -e &apos;MSSQL_PID=Express&apos; -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest-ubuntu 
+				docker run --name=mssql_database --network=airflow-starter -e &apos;ACCEPT_EULA=Y&apos; -e &apos;SA_PASSWORD=4HLgdrkntTpg&apos; -e &apos;MSSQL_PID=Express&apos; -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest-ubuntu 
 			&apos;&apos;&apos;
 			
             sleep(time:25,unit:&quot;SECONDS&quot;)

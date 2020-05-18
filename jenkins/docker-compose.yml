@@ -12,8 +12,8 @@ services:
         - ./jenkins_home:/var/jenkins_home
         - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - airflow-mssql-loader          
+      - airflow-starter          
           
 networks:
-  airflow-mssql-loader:
+  airflow-starter:
     external: true        
