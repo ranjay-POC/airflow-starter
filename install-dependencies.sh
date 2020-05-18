@@ -29,5 +29,5 @@ pwd
 ls -altr
 cd ../bootstrap_data/jenkins/
 cp -R ./jobs/ ../jenkins/jenkins_home/
-cp ./config.xml ../../jenkins/jenkins_home/
+cp ./config.xml ../jenkins/jenkins_home/
 docker start jenkins

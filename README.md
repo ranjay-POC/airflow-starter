@@ -45,7 +45,7 @@ sudo git clone https://github.com/ranjay-POC/airflow-starter.git
 
 
 ``` 
-sudo chmod -R 777 airflow-starter/
+sudo chmod -R 755 airflow-starter/
 cd  airflow-starter/
 ```
 
