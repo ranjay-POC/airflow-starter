@@ -21,13 +21,13 @@ sudo systemctl start docker.service
 
 
 docker info
-docker network create airflow-starter
+docker network create airflow-mssql-loader
 cd ./jenkins
 docker-compose down && docker-compose build && docker-compose up -d && sleep 10  &&  docker ps
 docker stop jenkins
 pwd
 ls -altr
-cd ./bootstrap_data/jenkins/
-cp -R ./bootstrap_data/jenkins/jobs/ ./jenkins/jenkins_home/
-cp ./bootstrap_data/jenkins/config.xml ./jenkins/jenkins_home/
+cd ../bootstrap_data/jenkins/
+cp -R ./jobs/ ../jenkins/jenkins_home/
+cp ./config.xml ../../jenkins/jenkins_home/
 docker start jenkins
