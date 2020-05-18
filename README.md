@@ -25,7 +25,7 @@ Please follow the steps below in order to have it up and running on your machine
 cd /opt/
 
 ```
-https://github.com/ranjay-POC/airflow-starter.git
+
 * Clone the repo
 
 
