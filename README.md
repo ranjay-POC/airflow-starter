@@ -14,7 +14,7 @@ What things you need to install the software and how to install them
 Virtual Machine or EC2 or Mac/Windows machine
 Docker installed on VM
 ```
-If trying this on AWS, then use this community AMI: *ami-0055d58addfe009d0* from AWS marketplace.
+If trying this on AWS, then use this community AMI: *ami-0055d58addfe009d0* from AWS.
 
 ### Installing
 
